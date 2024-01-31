@@ -1,49 +1,93 @@
 <?php
 
-class Sql extends PDO {
+class Usuario {
 
-    private $conn;
+    private $idusuario;
+    private $deslogin;
+    private $dessenha;
+    private $dtcadastro;
 
-    public function __construct() {
+    public function getIdusuario(){
 
-        $this->conn = new PDO("mysql:host=localhost;dbname=dbphp7", "root", "");
+        return $this->idusuario;
 
     }
 
-    private function setParams($statment, $parameters = array()) {
+    public function setIdusuario($value){
 
-        foreach ($parameters as $key => $value) {
+        $this->idusuario = $value;
 
-            $this->setParam($key, $value);
+    }
+
+    public function getDeslogin(){
+
+        return $this->deslogin;
+
+    }
+
+    public function setDeslogin($value){
+
+        $this->deslogin = $value;
+
+    }
+
+    public function getDessenha(){
+
+        return $this->dessenha;
+
+    }
+
+    public function setDessenha($value){
+
+        $this->dessenha = $value;
+
+    }
+
+    public function getDtcadastro(){
+
+        return $this->dtcadastro;
+
+    }
+
+    public function setDtcadastro($value){
+
+        $this->dtcadastro = $value;
+
+    }
+
+    public function loadById($id){
+
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID", array(
+
+            ":ID"=>$id
+
+        ));
+
+        if (count($results) > 0) {
+
+            $row = $results[0];
+
+            $this->setIdusuario($row['idusuario']);
+            $this->setDeslogin($row['deslogin']);
+            $this->setDessenha($row['dessenha']);
+            $this->setDtcadastro(new DateTime($row['dtcadastro']));
 
         }
 
     }
 
-    private function setParam($statment, $key, $value){
+    public function __toString(){
 
-        $statment->bindParam($key, $value);
+        return json_encode(array(
 
-    }
+            "idusuario"=>$this->getIdusuario(),
+            "deslogin"=>$this->getDeslogin(),
+            "dessenha"=>$this->getDessenha(),
+            "dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
 
-    public function runQuery($rawQuery, $params = array()) {
-
-        $stmt = $this->conn->prepare($rawQuery);
-
-        $this->setParams($stmt, $params);
-
-        $stmt->execute();
-
-        return $stmt;
-
-    }
-
-    public function select($rawQuery, $params = array()):array
-    {
-
-        $stmt = $this->runQuery($rawQuery, $params);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        ));
 
     }
 
