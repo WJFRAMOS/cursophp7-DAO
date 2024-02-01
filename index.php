@@ -48,18 +48,27 @@ require_once("config.php");
 // echo $aluno;
 //********************************* */
 
-// Update
+// Update (alterar um usuario)
 
+
+// $usuario = new Usuario();
+
+// $usuario -> loadById(8);
+
+// $usuario -> update("Professor","profiça");
+
+// echo $usuario;
+
+
+// Delete
 
 $usuario = new Usuario();
 
-$usuario -> loadById(8);
+$usuario -> loadById(20);
 
-$usuario -> update("Professor","profiça");
+$usuario -> delete();
 
 echo $usuario;
-
-
 
 
 ?>
