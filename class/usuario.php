@@ -114,6 +114,11 @@ class Usuario {
         }
     }
 
+
+    Public function insert(){
+        
+    }
+
     public function __toString(){
 
         return json_encode(array(
